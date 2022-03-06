@@ -1,0 +1,49 @@
+diff --git a/config.def.h b/config.def.h
+index b4fff92..93e4981 100644
+--- a/config.def.h
++++ b/config.def.h
+@@ -203,6 +203,9 @@ static Shortcut shortcuts[] = {
+ 	{ TERMMOD,              XK_Y,           selpaste,       {.i =  0} },
+ 	{ ShiftMask,            XK_Insert,      selpaste,       {.i =  0} },
+ 	{ TERMMOD,              XK_Num_Lock,    numlock,        {.i =  0} },
++	{ TERMMOD,              XK_underscore,	changealpha,	{.f = -0.05} },
++	{ TERMMOD,		XK_plus,	changealpha,	{.f = +0.05} },
++	{ ControlMask,		XK_minus,	changealpha,	{.f = +2.00} },
+ };
+ 
+ /*
+diff --git a/x.c b/x.c
+index 8188134..3aada94 100644
+--- a/x.c
++++ b/x.c
+@@ -55,6 +55,7 @@ static void clipcopy(const Arg *);
+ static void clippaste(const Arg *);
+ static void numlock(const Arg *);
+ static void selpaste(const Arg *);
++static void changealpha(const Arg *);
+ static void zoom(const Arg *);
+ static void zoomabs(const Arg *);
+ static void zoomreset(const Arg *);
+@@ -294,6 +295,22 @@ numlock(const Arg *dummy)
+ 	win.mode ^= MODE_NUMLOCK;
+ }
+ 
++void
++changealpha(const Arg *arg)
++{
++    if(alpha > 1 && arg->f == 2 )
++      alpha = 1;
++    if((alpha > 0 && arg->f < 0) || (alpha < 1 && arg->f > 0))
++        alpha += arg->f;
++    if(alpha < 0)
++        alpha = 0;
++    if(alpha > 1)
++        alpha = 1;
++    
++    xloadcols();
++    redraw();
++}
++
+ void
+ zoom(const Arg *arg)
+ {

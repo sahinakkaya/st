@@ -188,19 +188,22 @@ static unsigned int defaultattr = 11;
  */
 static uint forcemousemod = ShiftMask;
 
+// scroll amount for fast scrolling
+#define BIGSCROLL 25
+
 /*
  * Internal mouse shortcuts.
  * Beware that overloading Button1 will disable the selection.
  */
 static MouseShortcut mshortcuts[] = {
 	/* mask                 button   function        argument       release */
-	{ XK_ANY_MOD,           Button4, kscrollup,      {.i = 1},		0, /* !alt */ -1 },
-	{ XK_ANY_MOD,           Button5, kscrolldown,    {.i = 1},		0, /* !alt */ -1 },
-	{ XK_ANY_MOD,           Button2, selpaste,       {.i = 0},      1 },
-	{ ShiftMask,            Button4, ttysend,        {.s = "\033[5;2~"} },
-	{ XK_ANY_MOD,           Button4, ttysend,        {.s = "\031"} },
-	{ ShiftMask,            Button5, ttysend,        {.s = "\033[6;2~"} },
-	{ XK_ANY_MOD,           Button5, ttysend,        {.s = "\005"} },
+	{ ShiftMask,            Button4, kscrollup,      {.i = BIGSCROLL},		0, /* !alt */ -1 },
+	{ ShiftMask,            Button5, kscrolldown,    {.i = BIGSCROLL},		0, /* !alt */ -1 },
+	{ ControlMask,          Button5, zoom,           {.f = -1}},
+	{ ControlMask,          Button4, zoom,           {.f = +1}},
+	{ XK_NO_MOD,            Button4, kscrollup,      {.i = 1},	0, /* !alt */ -1 },
+	{ XK_NO_MOD,            Button5, kscrolldown,    {.i = 1},	0, /* !alt */ -1 },
+	{ XK_ANY_MOD,           Button2, selpaste,       {.i = 0}, 1 },
 };
 
 static char *openurlcmd[] = { "/bin/sh", "-c", "st-urlhandler -o", "externalpipe", NULL };
@@ -219,19 +222,35 @@ static Shortcut shortcuts[] = {
 	{ ControlMask,          XK_Print,       toggleprinter,  {.i =  0} },
 	{ ShiftMask,            XK_Print,       printscreen,    {.i =  0} },
 	{ XK_ANY_MOD,           XK_Print,       printsel,       {.i =  0} },
-	{ TERMMOD,              XK_Prior,       zoom,           {.f = +1} },
-	{ TERMMOD,              XK_Next,        zoom,           {.f = -1} },
-	{ TERMMOD,              XK_Home,        zoomreset,      {.f =  0} },
+
 	{ TERMMOD,              XK_C,           clipcopy,       {.i =  0} },
 	{ TERMMOD,              XK_V,           clippaste,      {.i =  0} },
 	{ TERMMOD,              XK_Y,           selpaste,       {.i =  0} },
+
+	{ MODKEY,               XK_comma,       zoom,           {.f = -1} },
+	{ MODKEY,               XK_period,      zoom,           {.f = +1} },
+	{ MODKEY,               XK_slash,       zoomreset,      {.f =  0} },
+
 	{ TERMMOD,		          XK_less,		    changealpha,	  {.f = -0.05} },
 	{ TERMMOD,		          XK_greater,		  changealpha,	  {.f = +0.05} }, 
+	{ TERMMOD,              XK_question,    resetalpha,     {.f =  0} },
+
   { MODKEY,               XK_l,           externalpipe,   {.v = openurlcmd} },
+	{ MODKEY,               XK_y,           externalpipe,   {.v = copyurlcmd } },
+	{ MODKEY,               XK_o,           externalpipe,   {.v = copyoutput } },
+
 	{ ShiftMask,            XK_Insert,      selpaste,       {.i =  0} },
 	{ TERMMOD,              XK_Num_Lock,    numlock,        {.i =  0} },
+
+	{ MODKEY,               XK_k,           kscrollup,      {.i =  1} },
+	{ MODKEY,               XK_j,           kscrolldown,    {.i =  1} },
 	{ ShiftMask,            XK_Page_Up,     kscrollup,      {.i = -1} },
 	{ ShiftMask,            XK_Page_Down,   kscrolldown,    {.i = -1} },
+  // scroll fast
+	{ TERMMOD,              XK_K,           kscrollup,      {.i = BIGSCROLL} },
+	{ TERMMOD,              XK_J,           kscrolldown,    {.i = BIGSCROLL} },
+	{ MODKEY,               XK_u,           kscrollup,      {.i = -1} },
+	{ MODKEY,               XK_d,           kscrolldown,    {.i = -1} },
 };
 
 /*

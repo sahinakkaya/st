@@ -1,0 +1,4 @@
+Installing ttf-symbola (tried free version) fixes st crashing for emojis like 🐼.
+even better, install libxft-bgra to support colors in emojis! 
+
+Of course this was written in ARCH WIKI! https://wiki.archlinux.org/title/St#Crashes_if_page_contains_emoji_characters

@@ -60,6 +60,7 @@ static void changealpha(const Arg *);
 static void zoom(const Arg *);
 static void zoomabs(const Arg *);
 static void zoomreset(const Arg *);
+static void resetalpha(const Arg *);
 static void ttysend(const Arg *);
 
 /* config.h for applying patches and the configuration. */
@@ -319,6 +320,15 @@ changealpha(const Arg *arg)
         alpha = 0;
     if(alpha > 1)
         alpha = 1;
+    
+    xloadcols();
+    redraw();
+}
+
+void
+resetalpha(const Arg *arg)
+{
+    alpha = DEFAULT_ALPHA;
     
     xloadcols();
     redraw();
